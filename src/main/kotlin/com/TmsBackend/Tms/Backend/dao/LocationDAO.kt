@@ -1,7 +1,7 @@
 package com.TmsBackend.Tms.Backend.dao
 
 
-import com.TmsBackend.Tms.Backend.dbentity.Location
+import com.TmsBackend.Tms.Backend.models.dao.Location
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Component

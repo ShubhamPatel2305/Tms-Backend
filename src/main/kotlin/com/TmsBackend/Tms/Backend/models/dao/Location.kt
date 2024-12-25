@@ -1,4 +1,4 @@
-package com.TmsBackend.Tms.Backend.dbentity
+package com.TmsBackend.Tms.Backend.models.dao
 
 import java.util.*
 

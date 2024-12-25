@@ -1,10 +1,8 @@
-package com.TmsBackend.Tms.Backend.models
+package com.TmsBackend.Tms.Backend.models.dto
 
-import com.TmsBackend.Tms.Backend.dbentity.Location
-import java.util.UUID
+import com.TmsBackend.Tms.Backend.models.dao.Location
 
-
-data class LocationResponse(
+data class LocationDTO(
     val id: String?,
     val name: String,
     val pointOfContact: String,
@@ -19,8 +17,8 @@ data class LocationResponse(
     val pincode: String
 ) {
     companion object {
-        fun fromEntity(location: Location): LocationResponse {
-            return LocationResponse(
+        fun fromDTO(location: Location): LocationDTO {
+            return LocationDTO(
                 id = location.id,
                 name = location.name,
                 pointOfContact = location.pointOfContact,
@@ -35,5 +33,21 @@ data class LocationResponse(
                 pincode = location.pincode
             )
         }
+    }
+    fun toDTO(id: String): Location {
+        return Location(
+            id = id,
+            name = name,
+            pointOfContact = pointOfContact,
+            contactNo = contactNo,
+            email = email,
+            addressLine1 = addressLine1,
+            addressLine2 = addressLine2,
+            state = state,
+            district = district,
+            taluka = taluka,
+            city = city,
+            pincode = pincode
+        )
     }
 }

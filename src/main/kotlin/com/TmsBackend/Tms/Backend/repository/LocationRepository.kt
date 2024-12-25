@@ -1,7 +1,7 @@
 package com.TmsBackend.Tms.Backend.repository
 
 import com.TmsBackend.Tms.Backend.dao.LocationDao
-import com.TmsBackend.Tms.Backend.dbentity.Location
+import com.TmsBackend.Tms.Backend.models.dao.Location
 import org.springframework.stereotype.Repository
 
 @Repository
