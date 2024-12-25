@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/party")
+@RequestMapping("/api/parties")
+@CrossOrigin
 class PartyController(private val partyService: PartyService) {
 
     @GetMapping
@@ -15,7 +16,7 @@ class PartyController(private val partyService: PartyService) {
         return ResponseEntity.ok(parties)
     }
 
-    @PostMapping
+    @PostMapping("/create")
     fun addParty(@RequestBody request: PartyDTO): ResponseEntity<PartyDTO> {
         val createdParty = partyService.addParty(request)
         return ResponseEntity.status(201).body(createdParty)

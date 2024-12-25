@@ -14,7 +14,8 @@ data class PartyDTO(
     val district: String,
     val taluka: String,
     val city: String,
-    val pincode: String
+    val pincode: String,
+    val created_at: Long
 ) {
     companion object {
         fun fromDTO(party: Party): PartyDTO {
@@ -30,7 +31,8 @@ data class PartyDTO(
                 district = party.district,
                 taluka = party.taluka,
                 city = party.city,
-                pincode = party.pincode
+                pincode = party.pincode,
+                created_at = party.created_at
             )
         }
     }
@@ -48,7 +50,8 @@ data class PartyDTO(
             district = district,
             taluka = taluka,
             city = city,
-            pincode = pincode
+            pincode = pincode,
+            created_at = created_at
         )
     }
 }

@@ -14,5 +14,6 @@ data class Party(
     val district: String,
     val taluka: String,
     val city: String,
-    val pincode: String
+    val pincode: String,
+    val created_at: Long = System.currentTimeMillis()
 )

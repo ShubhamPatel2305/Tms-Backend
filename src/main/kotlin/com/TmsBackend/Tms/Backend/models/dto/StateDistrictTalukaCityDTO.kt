@@ -1,18 +1,18 @@
 package com.TmsBackend.Tms.Backend.models.dto
 
 data class StateRequest(
-    val state: String?
+    val states: List<String>? = null
 )
 
 data class DistrictRequest(
-    val state: String?,
-    val district: String?
+    val states: List<String>? = null,
+    val districts: List<String>? = null
 )
 
 data class CityRequest(
-    val state: String?,
-    val district: String?,
-    val taluka: String?
+    val states: List<String>? = null,
+    val districts: List<String>? = null,
+    val talukas: List<String>? = null
 )
 
 data class Location(

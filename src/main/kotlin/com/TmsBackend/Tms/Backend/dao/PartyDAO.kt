@@ -21,7 +21,8 @@ class PartyDao(private val jdbcTemplate: JdbcTemplate) {
             district = rs.getString("district"),
             taluka = rs.getString("taluka"),
             city = rs.getString("city"),
-            pincode = rs.getString("pincode")
+            pincode = rs.getString("pincode"),
+            created_at = rs.getLong("created_at")
         )
     }
 
@@ -32,11 +33,11 @@ class PartyDao(private val jdbcTemplate: JdbcTemplate) {
 
     fun addParty(party: Party): Party {
         val sql = """
-            INSERT INTO party (id, name, point_of_contact, contact_no, email, address_line1, address_line2, state, district, taluka, city, pincode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO party (id, name, point_of_contact, contact_no, email, address_line1, address_line2, state, district, taluka, city, pincode, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         jdbcTemplate.update(sql, party.id, party.name, party.pointOfContact, party.contactNo, party.email, party.addressLine1,
-            party.addressLine2, party.state, party.district, party.taluka, party.city, party.pincode)
+            party.addressLine2, party.state, party.district, party.taluka, party.city, party.pincode, party.created_at)
         return party
     }
 

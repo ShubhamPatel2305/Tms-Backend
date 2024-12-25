@@ -53,10 +53,10 @@ class LocationDao(private val jdbcTemplate: JdbcTemplate) {
         return try {
             val sql = """
                 UPDATE location SET name = ?, point_of_contact = ?, contact_number = ?, email = ?, address_line1 = ?, address_line2 = ?, state = ?, 
-                district = ?, taluka = ?, city = ?, pincode = ?, created_at = ? WHERE id = ?
+                district = ?, taluka = ?, city = ?, pincode = ? WHERE id = ?
             """
             jdbcTemplate.update(sql, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
-                location.addressLine2, location.state, location.district, location.taluka, location.city, location.pincode, location.id, location.created_at)
+                location.addressLine2, location.state, location.district, location.taluka, location.city, location.pincode, location.id)
             location
         } catch (ex: Exception) {
             throw RuntimeException("Error updating location: ${ex.message}")

@@ -1,5 +1,6 @@
 package com.TmsBackend.Tms.Backend.service
 
+import com.TmsBackend.Tms.Backend.models.dto.LocationDTO
 import com.TmsBackend.Tms.Backend.models.dto.PartyDTO
 import com.TmsBackend.Tms.Backend.repository.PartyRepository
 import org.springframework.stereotype.Service
@@ -14,6 +15,8 @@ class PartyService(private val partyRepository: PartyRepository) {
 
     fun addParty(request: PartyDTO): PartyDTO {
         val party = request.toDTO(id = UUID.randomUUID().toString())
+        val partyWithCurrentTime = party.copy(created_at = System.currentTimeMillis())
+        PartyDTO.fromDTO(partyRepository.save(partyWithCurrentTime))
         return PartyDTO.fromDTO(partyRepository.save(party))
     }
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 
 @RestController
 @RequestMapping("/api/v1/location")
+@CrossOrigin
 class LocationController(private val locationService: LocationService) {
 
     @GetMapping

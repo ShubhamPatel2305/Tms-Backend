@@ -26,57 +26,61 @@ class StateDistrictTalukaCityService() {
     }
 
     fun listDistricts(stateRequest: StateRequest): List<String> {
-        return when (stateRequest.state) {
-            null -> locations.locations.flatMap { location ->
+        return when {
+            stateRequest.states.isNullOrEmpty() -> locations.locations.flatMap { location ->
                 location.districts.map { district -> district.name }
             }
             else -> locations.locations
-                .find { location -> location.name == stateRequest.state }
-                ?.districts
-                ?.map { district -> district.name }
-                ?: emptyList()
+                .filter { location -> location.name in stateRequest.states }
+                .flatMap { location -> location.districts.map { district -> district.name } }
+                .distinct()
         }
     }
 
     fun listTalukas(request: DistrictRequest): List<String> {
         return when {
-            // Both state and district are null - return all talukas
-            request.state == null && request.district == null -> {
+            // Both states and districts are null - return all talukas
+            request.states.isNullOrEmpty() && request.districts.isNullOrEmpty() -> {
                 locations.locations.flatMap { location ->
                     location.districts.flatMap { district ->
                         district.talukas.map { taluka -> taluka.name }
                     }
                 }
             }
-            // Only state is provided - return all talukas in that state
-            request.state != null && request.district == null -> {
+            // Only states are provided - return all talukas in those states
+            !request.states.isNullOrEmpty() && request.districts.isNullOrEmpty() -> {
                 locations.locations
-                    .find { location -> location.name == request.state }
-                    ?.districts
-                    ?.flatMap { district ->
-                        district.talukas.map { taluka -> taluka.name }
+                    .filter { location -> location.name in request.states }
+                    .flatMap { location ->
+                        location.districts.flatMap { district ->
+                            district.talukas.map { taluka -> taluka.name }
+                        }
                     }
-                    ?: emptyList()
+                    .distinct()
             }
-            // Only district is provided - return all talukas in that district across all states
-            request.state == null && request.district != null -> {
+            // Only districts are provided - return all talukas in those districts across all states
+            request.states.isNullOrEmpty() && !request.districts.isNullOrEmpty() -> {
                 locations.locations.flatMap { location ->
                     location.districts
-                        .filter { district -> district.name == request.district }
+                        .filter { district -> district.name in request.districts }
                         .flatMap { district ->
                             district.talukas.map { taluka -> taluka.name }
                         }
                 }
+                    .distinct()
             }
-            // Both state and district are provided
+            // Both states and districts are provided
             else -> {
                 locations.locations
-                    .find { location -> location.name == request.state }
-                    ?.districts
-                    ?.find { district -> district.name == request.district }
-                    ?.talukas
-                    ?.map { taluka -> taluka.name }
-                    ?: emptyList()
+                    .filter { location -> location.name in request.states!! }
+                    .flatMap { location ->
+                        location.districts
+                            .filter { district -> district.name in request.districts!! }
+                            .flatMap { district ->
+                                district.talukas.map { taluka -> taluka.name }
+                            }
+                    }
+                    .distinct()
             }
         }
     }
@@ -84,87 +88,99 @@ class StateDistrictTalukaCityService() {
     fun listCities(request: CityRequest): List<String> {
         return when {
             // All parameters are null - return all cities
-            request.state == null && request.district == null && request.taluka == null -> {
+            request.states.isNullOrEmpty() && request.districts.isNullOrEmpty() && request.talukas.isNullOrEmpty() -> {
                 locations.locations.flatMap { location ->
                     location.districts.flatMap { district ->
                         district.talukas.flatMap { taluka -> taluka.cities }
                     }
                 }
             }
-            // Only state is provided
-            request.state != null && request.district == null && request.taluka == null -> {
+            // Only states are provided
+            !request.states.isNullOrEmpty() && request.districts.isNullOrEmpty() && request.talukas.isNullOrEmpty() -> {
                 locations.locations
-                    .find { location -> location.name == request.state }
-                    ?.districts
-                    ?.flatMap { district ->
-                        district.talukas.flatMap { taluka -> taluka.cities }
+                    .filter { location -> location.name in request.states }
+                    .flatMap { location ->
+                        location.districts.flatMap { district ->
+                            district.talukas.flatMap { taluka -> taluka.cities }
+                        }
                     }
-                    ?: emptyList()
+                    .distinct()
             }
-            // Only district is provided
-            request.state == null && request.district != null && request.taluka == null -> {
+            // Only districts are provided
+            request.states.isNullOrEmpty() && !request.districts.isNullOrEmpty() && request.talukas.isNullOrEmpty() -> {
                 locations.locations.flatMap { location ->
                     location.districts
-                        .filter { district -> district.name == request.district }
+                        .filter { district -> district.name in request.districts }
                         .flatMap { district ->
                             district.talukas.flatMap { taluka -> taluka.cities }
                         }
                 }
+                    .distinct()
             }
-            // Only taluka is provided
-            request.state == null && request.district == null && request.taluka != null -> {
+            // Only talukas are provided
+            request.states.isNullOrEmpty() && request.districts.isNullOrEmpty() && !request.talukas.isNullOrEmpty() -> {
                 locations.locations.flatMap { location ->
                     location.districts.flatMap { district ->
                         district.talukas
-                            .filter { taluka -> taluka.name == request.taluka }
+                            .filter { taluka -> taluka.name in request.talukas }
                             .flatMap { taluka -> taluka.cities }
                     }
                 }
+                    .distinct()
             }
-            // State and district are provided
-            request.state != null && request.district != null && request.taluka == null -> {
+            // States and districts are provided
+            !request.states.isNullOrEmpty() && !request.districts.isNullOrEmpty() && request.talukas.isNullOrEmpty() -> {
                 locations.locations
-                    .find { location -> location.name == request.state }
-                    ?.districts
-                    ?.find { district -> district.name == request.district }
-                    ?.talukas
-                    ?.flatMap { taluka -> taluka.cities }
-                    ?: emptyList()
-            }
-            // State and taluka are provided
-            request.state != null && request.district == null && request.taluka != null -> {
-                locations.locations
-                    .find { location -> location.name == request.state }
-                    ?.districts
-                    ?.flatMap { district ->
-                        district.talukas
-                            .filter { taluka -> taluka.name == request.taluka }
-                            .flatMap { taluka -> taluka.cities }
+                    .filter { location -> location.name in request.states }
+                    .flatMap { location ->
+                        location.districts
+                            .filter { district -> district.name in request.districts }
+                            .flatMap { district ->
+                                district.talukas.flatMap { taluka -> taluka.cities }
+                            }
                     }
-                    ?: emptyList()
+                    .distinct()
             }
-            // District and taluka are provided
-            request.state == null && request.district != null && request.taluka != null -> {
+            // States and talukas are provided
+            !request.states.isNullOrEmpty() && request.districts.isNullOrEmpty() && !request.talukas.isNullOrEmpty() -> {
+                locations.locations
+                    .filter { location -> location.name in request.states }
+                    .flatMap { location ->
+                        location.districts.flatMap { district ->
+                            district.talukas
+                                .filter { taluka -> taluka.name in request.talukas }
+                                .flatMap { taluka -> taluka.cities }
+                        }
+                    }
+                    .distinct()
+            }
+            // Districts and talukas are provided
+            request.states.isNullOrEmpty() && !request.districts.isNullOrEmpty() && !request.talukas.isNullOrEmpty() -> {
                 locations.locations.flatMap { location ->
                     location.districts
-                        .filter { district -> district.name == request.district }
+                        .filter { district -> district.name in request.districts }
                         .flatMap { district ->
                             district.talukas
-                                .filter { taluka -> taluka.name == request.taluka }
+                                .filter { taluka -> taluka.name in request.talukas }
                                 .flatMap { taluka -> taluka.cities }
                         }
                 }
+                    .distinct()
             }
             // All parameters are provided
             else -> {
                 locations.locations
-                    .find { location -> location.name == request.state }
-                    ?.districts
-                    ?.find { district -> district.name == request.district }
-                    ?.talukas
-                    ?.filter { taluka -> taluka.name == request.taluka }
-                    ?.flatMap { taluka -> taluka.cities }
-                    ?: emptyList()
+                    .filter { location -> location.name in request.states!! }
+                    .flatMap { location ->
+                        location.districts
+                            .filter { district -> district.name in request.districts!! }
+                            .flatMap { district ->
+                                district.talukas
+                                    .filter { taluka -> taluka.name in request.talukas!! }
+                                    .flatMap { taluka -> taluka.cities }
+                            }
+                    }
+                    .distinct()
             }
         }
     }
