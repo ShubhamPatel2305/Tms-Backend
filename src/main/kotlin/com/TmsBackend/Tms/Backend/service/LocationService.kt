@@ -9,20 +9,38 @@ import java.util.UUID
 class LocationService(private val locationRepository: LocationRepository) {
 
     fun getAllLocations(): List<LocationDTO> {
-        return locationRepository.findAll().map { LocationDTO.fromDTO(it) }
+        return try {
+            locationRepository.findAll().map { LocationDTO.fromDTO(it) }
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching locations: ${ex.message}")
+        }
     }
 
     fun addLocation(request: LocationDTO): LocationDTO {
-        val location = request.toDTO(id = UUID.randomUUID().toString())
-        return LocationDTO.fromDTO(locationRepository.save(location))
+        return try {
+            val location = request.toDTO(id = UUID.randomUUID().toString())
+            // Override created_at to the current epoch time
+            val locationWithCurrentTime = location.copy(created_at = System.currentTimeMillis())
+            LocationDTO.fromDTO(locationRepository.save(locationWithCurrentTime))
+        } catch (ex: Exception) {
+            throw RuntimeException("Error adding location: ${ex.message}")
+        }
     }
 
     fun updateLocation(id: String, request: LocationDTO): LocationDTO {
-        val location = request.toDTO(id)
-        return LocationDTO.fromDTO(locationRepository.update(location))
+        return try {
+            val location = request.toDTO(id)
+            LocationDTO.fromDTO(locationRepository.update(location))
+        } catch (ex: Exception) {
+            throw RuntimeException("Error updating location with id $id: ${ex.message}")
+        }
     }
 
     fun deleteLocation(id: String) {
-        locationRepository.delete(id)
+        try {
+            locationRepository.delete(id)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error deleting location with id $id: ${ex.message}")
+        }
     }
 }

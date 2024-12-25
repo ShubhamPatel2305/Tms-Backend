@@ -8,18 +8,34 @@ import org.springframework.stereotype.Repository
 class LocationRepository(private val locationDao: LocationDao) {
 
     fun findAll(): List<Location> {
-        return locationDao.getAlllocation()
+        return try {
+            locationDao.getAlllocation()
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching locations: ${ex.message}")
+        }
     }
 
     fun save(location: Location): Location {
-        return locationDao.addLocation(location)
+        return try {
+            locationDao.addLocation(location)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error saving location: ${ex.message}")
+        }
     }
 
     fun update(location: Location): Location {
-        return locationDao.updateLocation(location)
+        return try {
+            locationDao.updateLocation(location)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error updating location: ${ex.message}")
+        }
     }
 
     fun delete(id: String) {
-        locationDao.deleteLocation(id)
+        try {
+            locationDao.deleteLocation(id)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error deleting location with id $id: ${ex.message}")
+        }
     }
 }

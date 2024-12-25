@@ -14,7 +14,8 @@ data class LocationDTO(
     val district: String,
     val taluka: String,
     val city: String,
-    val pincode: String
+    val pincode: String,
+    val created_at: Long // Removed default value
 ) {
     companion object {
         fun fromDTO(location: Location): LocationDTO {
@@ -30,10 +31,12 @@ data class LocationDTO(
                 district = location.district,
                 taluka = location.taluka,
                 city = location.city,
-                pincode = location.pincode
+                pincode = location.pincode,
+                created_at = location.created_at
             )
         }
     }
+
     fun toDTO(id: String): Location {
         return Location(
             id = id,
@@ -47,7 +50,8 @@ data class LocationDTO(
             district = district,
             taluka = taluka,
             city = city,
-            pincode = pincode
+            pincode = pincode,
+            created_at = created_at // backend will manage this field
         )
     }
 }

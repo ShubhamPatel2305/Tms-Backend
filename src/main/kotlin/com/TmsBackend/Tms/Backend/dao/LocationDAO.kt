@@ -1,6 +1,5 @@
 package com.TmsBackend.Tms.Backend.dao
 
-
 import com.TmsBackend.Tms.Backend.models.dao.Location
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -22,39 +21,54 @@ class LocationDao(private val jdbcTemplate: JdbcTemplate) {
             district = rs.getString("district"),
             taluka = rs.getString("taluka"),
             city = rs.getString("city"),
-            pincode = rs.getString("pincode")
+            pincode = rs.getString("pincode"),
+            created_at = rs.getLong("created_at")
         )
     }
 
     fun getAlllocation(): List<Location> {
-        val sql = "SELECT * FROM location"
-        return jdbcTemplate.query(sql, rowMapper)
+        return try {
+            val sql = "SELECT * FROM location"
+            jdbcTemplate.query(sql, rowMapper)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching all locations: ${ex.message}")
+        }
     }
 
     fun addLocation(location: Location): Location {
-        val sql = """
-            INSERT INTO location (id, name, point_of_contact, contact_number, email, address_line1, address_line2, state, district, taluka, city, pincode)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """
-        jdbcTemplate.update(sql, location.id, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
-            location.addressLine2, location.state, location.district, location.taluka, location.city, location.pincode)
-        return location
+        return try {
+            val sql = """
+                INSERT INTO location (id, name, point_of_contact, contact_number, email, address_line1, address_line2, state, district, taluka, city, pincode, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
+            jdbcTemplate.update(sql, location.id, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
+                location.addressLine2, location.state, location.district, location.taluka, location.city, location.pincode, location.created_at)
+            location
+        } catch (ex: Exception) {
+            throw RuntimeException("Error adding location: ${ex.message}")
+        }
     }
 
     fun updateLocation(location: Location): Location {
-        val sql = """
-            UPDATE location SET name = ?, point_of_contact = ?, contact_number = ?, email = ?, address_line1 = ?, address_line2 = ?, state = ?, 
-            district = ?, taluka = ?, city = ?, pincode = ? WHERE id = ?
-        """
-        jdbcTemplate.update(sql, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
-            location.addressLine2, location.state, location.district, location.taluka, location.city, location.pincode, location.id)
-        return location
+        return try {
+            val sql = """
+                UPDATE location SET name = ?, point_of_contact = ?, contact_number = ?, email = ?, address_line1 = ?, address_line2 = ?, state = ?, 
+                district = ?, taluka = ?, city = ?, pincode = ?, created_at = ? WHERE id = ?
+            """
+            jdbcTemplate.update(sql, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
+                location.addressLine2, location.state, location.district, location.taluka, location.city, location.pincode, location.id, location.created_at)
+            location
+        } catch (ex: Exception) {
+            throw RuntimeException("Error updating location: ${ex.message}")
+        }
     }
 
     fun deleteLocation(id: String) {
-        val sql = "DELETE FROM location WHERE id = ?"
-        jdbcTemplate.update(sql, id)
+        try {
+            val sql = "DELETE FROM location WHERE id = ?"
+            jdbcTemplate.update(sql, id)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error deleting location with id $id: ${ex.message}")
+        }
     }
 }
-
-
