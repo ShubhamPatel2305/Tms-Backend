@@ -1,0 +1,577 @@
+gujarat:
+  Ahmedabad:
+    talukas:
+      Ahmedabad City:
+        cities: [Ahmedabad, Bopal, Ghatlodiya]
+      Daskroi:
+        cities: [Bareja, Kathwada, Vatva]
+      Dhandhuka:
+        cities: [Dhandhuka, Barwala]
+      Detroj-Rampura:
+        cities: [Detroj, Rampura]
+      Sanand:
+        cities: [Sanand, Iyava]
+      Bavla:
+        cities: [Bavla, Moraiya]
+      Dholka:
+        cities: [Dholka, Pipli]
+      Mandal:
+        cities: [Mandal, Virdi]
+      Viramgam:
+        cities: [Viramgam, Ogan]
+
+  Amreli:
+    talukas:
+      Amreli:
+        cities: [Amreli, Vadia]
+      Babra:
+        cities: [Babra, Vadiya]
+      Dhari:
+        cities: [Dhari, Kovaya]
+      Jafrabad:
+        cities: [Jafrabad, Rajula]
+      Khambha:
+        cities: [Khambha, Dungar]
+      Kunkavav-Vadia:
+        cities: [Kunkavav, Vadia]
+      Lathi:
+        cities: [Lathi, Devka]
+      Rajula:
+        cities: [Rajula, Victor]
+      Savarkundla:
+        cities: [Savarkundla, Dungar]
+      Lilia:
+        cities: [Lilia, Chittal]
+      Bagasara:
+        cities: [Bagasara, Shiyani]
+
+  Anand:
+    talukas:
+      Anand:
+        cities: [Anand, Vidyanagar, Karamsad]
+      Anklav:
+        cities: [Anklav, Jhalod]
+      Borsad:
+        cities: [Borsad, Sogitra]
+      Khambhat:
+        cities: [Khambhat, Tarapur]
+      Petlad:
+        cities: [Petlad, Sojitra]
+      Sojitra:
+        cities: [Sojitra, Vaso]
+      Umreth:
+        cities: [Umreth, Nadiad]
+      Tarapur:
+        cities: [Tarapur, Khambhat]
+
+  Aravalli:
+    talukas:
+      Bhiloda:
+        cities: [Bhiloda, Meghraj]
+      Bayad:
+        cities: [Bayad, Vadagam]
+      Dhansura:
+        cities: [Dhansura, Modasa]
+      Malpur:
+        cities: [Malpur, Meghraj]
+      Meghraj:
+        cities: [Meghraj, Shamalaji]
+      Modasa:
+        cities: [Modasa, Dhansura]
+
+  Banaskantha:
+    talukas:
+      Amirgadh:
+        cities: [Amirgadh, Dantiwada]
+      Bhabhar:
+        cities: [Bhabhar, Deodar]
+      Danta:
+        cities: [Danta, Ambaji]
+      Dantiwada:
+        cities: [Dantiwada, Vadgam]
+      Deesa:
+        cities: [Deesa, Ranpur]
+      Deodar:
+        cities: [Deodar, Bhabhar]
+      Dhanera:
+        cities: [Dhanera, Tharad]
+      Kankrej:
+        cities: [Kankrej, Thara]
+      Palanpur:
+        cities: [Palanpur, Deesa]
+      Tharad:
+        cities: [Tharad, Vav]
+      Vadgam:
+        cities: [Vadgam, Palanpur]
+      Vav:
+        cities: [Vav, Suigam]
+
+  Bharuch:
+    talukas:
+      Amod:
+        cities: [Amod, Bharuch]
+      Ankleshwar:
+        cities: [Ankleshwar, Panoli]
+      Bharuch:
+        cities: [Bharuch, Dahej]
+      Hansot:
+        cities: [Hansot, Didrol]
+      Jambusar:
+        cities: [Jambusar, Amod]
+      Jhagadia:
+        cities: [Jhagadia, Netrang]
+      Vagra:
+        cities: [Vagra, Dahej]
+      Valia:
+        cities: [Valia, Netrang]
+
+  Bhavnagar:
+    talukas:
+      Bhavnagar:
+        cities: [Bhavnagar, Alang]
+      Gariadhar:
+        cities: [Gariadhar, Dungar]
+      Ghogha:
+        cities: [Ghogha, Bhavnagar]
+      Jesar:
+        cities: [Jesar, Sihor]
+      Mahuva:
+        cities: [Mahuva, Talaja]
+      Palitana:
+        cities: [Palitana, Shetrunjaya]
+      Sihor:
+        cities: [Sihor, Ghogha]
+      Talaja:
+        cities: [Talaja, Mahuva]
+      Umrala:
+        cities: [Umrala, Botad]
+      Vallabhipur:
+        cities: [Vallabhipur, Bhavnagar]
+
+  Botad:
+    talukas:
+      Botad:
+        cities: [Botad, Ranpur]
+      Barwala:
+        cities: [Barwala, Gadhada]
+      Gadhada:
+        cities: [Gadhada, Botad]
+      Ranpur:
+        cities: [Ranpur, Barwala]
+
+  Chhota Udaipur:
+    talukas:
+      Bodeli:
+        cities: [Bodeli, Chhota Udaipur]
+      Chhota Udaipur:
+        cities: [Chhota Udaipur, Kavant]
+      Jetpur Pavi:
+        cities: [Jetpur Pavi, Naswadi]
+      Kavant:
+        cities: [Kavant, Bodeli]
+      Naswadi:
+        cities: [Naswadi, Sankheda]
+      Sankheda:
+        cities: [Sankheda, Jetpur Pavi]
+
+  Dahod:
+    talukas:
+      Dahod:
+        cities: [Dahod, Jhalod]
+      Devgadh Baria:
+        cities: [Devgadh Baria, Limkheda]
+      Dhanpur:
+        cities: [Dhanpur, Fatepura]
+      Fatepura:
+        cities: [Fatepura, Garbada]
+      Garbada:
+        cities: [Garbada, Limkheda]
+      Jhalod:
+        cities: [Jhalod, Singvad]
+      Limkheda:
+        cities: [Limkheda, Dahod]
+      Singvad:
+        cities: [Singvad, Dhanpur]
+
+  Dang:
+    talukas:
+      Ahwa:
+        cities: [Ahwa, Waghai]
+      Subir:
+        cities: [Subir, Ahwa]
+      Waghai:
+        cities: [Waghai, Subir]
+
+  Devbhoomi Dwarka:
+    talukas:
+      Bhanvad:
+        cities: [Bhanvad, Kalyanpur]
+      Kalyanpur:
+        cities: [Kalyanpur, Khambhalia]
+      Khambhalia:
+        cities: [Khambhalia, Dwarka]
+      Okhamandal:
+        cities: [Dwarka, Okha]
+
+  Gandhinagar:
+    talukas:
+      Dehgam:
+        cities: [Dehgam, Gandhinagar]
+      Gandhinagar:
+        cities: [Gandhinagar, Adalaj]
+      Kalol:
+        cities: [Kalol, Mansa]
+      Mansa:
+        cities: [Mansa, Dehgam]
+
+  Gir Somnath:
+    talukas:
+      Kodinar:
+        cities: [Kodinar, Una]
+      Sutrapada:
+        cities: [Sutrapada, Veraval]
+      Talala:
+        cities: [Talala, Kodinar]
+      Una:
+        cities: [Una, Diu]
+      Veraval:
+        cities: [Veraval, Patan Veraval]
+
+  Jamnagar:
+    talukas:
+      Dhrol:
+        cities: [Dhrol, Jamnagar]
+      Jamjodhpur:
+        cities: [Jamjodhpur, Lalpur]
+      Jamnagar:
+        cities: [Jamnagar, Sikka]
+      Jodiya:
+        cities: [Jodiya, Dhrol]
+      Kalawad:
+        cities: [Kalawad, Jamjodhpur]
+      Lalpur:
+        cities: [Lalpur, Jodiya]
+
+  Junagadh:
+    talukas:
+      Bhesan:
+        cities: [Bhesan, Junagadh]
+      Junagadh:
+        cities: [Junagadh, Girnar]
+      Keshod:
+        cities: [Keshod, Mangrol]
+      Malia:
+        cities: [Malia, Keshod]
+      Mangrol:
+        cities: [Mangrol, Chorwad]
+      Manavadar:
+        cities: [Manavadar, Vanthali]
+      Mendarda:
+        cities: [Mendarda, Bhesan]
+      Vanthali:
+        cities: [Vanthali, Junagadh]
+      Visavadar:
+        cities: [Visavadar, Mendarda]
+
+  Kheda:
+    talukas:
+      Kapadvanj:
+        cities: [Kapadvanj, Kathlal]
+      Kathlal:
+        cities: [Kathlal, Mehmedabad]
+      Kheda:
+        cities: [Kheda, Nadiad]
+      Mahudha:
+        cities: [Mahudha, Matar]
+      Matar:
+        cities: [Matar, Kheda]
+      Mehmedabad:
+        cities: [Mehmedabad, Mahudha]
+      Nadiad:
+        cities: [Nadiad, Kapadvanj]
+      Thasra:
+        cities: [Thasra, Nadiad]
+      Vaso:
+        cities: [Vaso, Thasra]
+
+  Kutch:
+    talukas:
+      Abdasa:
+        cities: [Abdasa, Naliya]
+      Anjar:
+        cities: [Anjar, Gandhidham]
+      Bhachau:
+        cities: [Bhachau, Rapar]
+      Bhuj:
+        cities: [Bhuj, Mundra]
+      Gandhidham:
+        cities: [Gandhidham, Adipur]
+      Lakhpat:
+        cities: [Lakhpat, Narayan Sarovar]
+      Mandvi:
+        cities: [Mandvi, Mundra]
+      Mundra:
+        cities: [Mundra, Anjar]
+      Nakhatrana:
+        cities: [Nakhatrana, Bhuj]
+      Rapar:
+        cities: [Rapar, Bhachau]
+
+  Mahisagar:
+    talukas:
+      Balasinor:
+        cities: [Balasinor, Lunawada]
+      Kadana:
+        cities: [Kadana, Santrampur]
+      Khanpur:
+        cities: [Khanpur, Balasinor]
+      Lunawada:
+        cities: [Lunawada, Santrampur]
+      Santrampur:
+        cities: [Santrampur, Kadana]
+      Virpur:
+        cities: [Virpur, Khanpur]
+
+  Mehsana:
+    talukas:
+      Becharaji:
+        cities: [Becharaji, Mehsana]
+      Jotana:
+        cities: [Jotana, Unjha]
+      Kadi:
+        cities: [Kadi, Becharaji]
+      Kheralu:
+        cities: [Kheralu, Visnagar]
+      Mehsana:
+        cities: [Mehsana, Kadi]
+      Satlasana:
+        cities: [Satlasana, Kheralu]
+      Unjha:
+        cities: [Unjha, Vijapur]
+      Vadnagar:
+        cities: [Vadnagar, Visnagar]
+      Vijapur:
+        cities: [Vijapur, Jotana]
+      Visnagar:
+        cities: [Visnagar, Vadnagar]
+
+  Morbi:
+    talukas:
+      Halvad:
+        cities: [Halvad, Morbi]
+      Maliya:
+        cities: [Maliya, Wankaner]
+      Morbi:
+        cities: [Morbi, Tankara]
+      Tankara:
+        cities: [Tankara, Halvad]
+      Wankaner:
+        cities: [Wankaner, Maliya]
+
+  Narmada:
+    talukas:
+      Dediyapada:
+        cities: [Dediyapada, Rajpipla]
+      Garudeshwar:
+        cities: [Garudeshwar, Kevadiya]
+      Nandod:
+        cities: [Rajpipla, Kevadiya]
+      Sagbara:
+        cities: [Sagbara, Dediyapada]
+      Tilakwada:
+        cities: [Tilakwada, Garudeshwar]
+
+  Navsari:
+    talukas:
+      Chikhli:
+        cities: [Chikhli, Navsari]
+      Gandevi:
+        cities: [Gandevi, Bilimora]
+      Jalalpore:
+        cities: [Jalalpore, Navsari]
+      Navsari:
+        cities: [Navsari, Gandevi]
+      Vansda:
+        cities: [Vansda, Chikhli]
+
+  Panchmahal:
+    talukas:
+      Ghoghamba:
+        cities: [Ghoghamba, Godhra]
+      Godhra:
+        cities: [Godhra, Halol]
+      Halol:
+        cities: [Halol, Kalol]
+      Jambughoda:
+        cities: [Jambughoda, Ghoghamba]
+      Kalol:
+        cities: [Kalol, Morva Hadaf]
+      Morva Hadaf:
+        cities: [Morva Hadaf, Sahera]
+      Sahera:
+        cities: [Sahera, Jambughoda]
+
+  Patan:
+    talukas:
+      Chanasma:
+        cities: [ Chanasma, Patan ]
+      Harij:
+        cities: [ Harij, Sami ]
+      Patan:
+        cities: [ Patan, Siddhpur ]
+      Radhanpur:
+        cities: [ Radhanpur, Santalpur ]
+      Sami:
+        cities: [ Sami, Harij ]
+      Santalpur:
+        cities: [ Santalpur, Radhanpur ]
+      Saraswati:
+        cities: [ Saraswati, Chanasma ]
+      Siddhpur:
+        cities: [ Siddhpur, Patan ]
+
+  Porbandar:
+    talukas:
+      Kutiyana:
+        cities: [ Kutiyana, Porbandar ]
+      Porbandar:
+        cities: [ Porbandar, Chhaya ]
+      Ranavav:
+        cities: [ Ranavav, Kutiyana ]
+
+  Rajkot:
+    talukas:
+      Dhoraji:
+        cities: [ Dhoraji, Upleta ]
+      Gondal:
+        cities: [ Gondal, Jetpur ]
+      Jamkandorna:
+        cities: [ Jamkandorna, Paddhari ]
+      Jasdan:
+        cities: [ Jasdan, Vinchhiya ]
+      Jetpur:
+        cities: [ Jetpur, Dhoraji ]
+      Kotda Sangani:
+        cities: [ Kotda Sangani, Gondal ]
+      Lodhika:
+        cities: [ Lodhika, Rajkot ]
+      Paddhari:
+        cities: [ Paddhari, Jasdan ]
+      Rajkot:
+        cities: [ Rajkot, Madhapar ]
+      Upleta:
+        cities: [ Upleta, Jamkandorna ]
+      Vinchhiya:
+        cities: [ Vinchhiya, Kotda Sangani ]
+
+  Sabarkantha:
+    talukas:
+      Himmatnagar:
+        cities: [ Himmatnagar, Prantij ]
+      Idar:
+        cities: [ Idar, Vadali ]
+      Khedbrahma:
+        cities: [ Khedbrahma, Vijaynagar ]
+      Poshina:
+        cities: [ Poshina, Khedbrahma ]
+      Prantij:
+        cities: [ Prantij, Talod ]
+      Talod:
+        cities: [ Talod, Idar ]
+      Vadali:
+        cities: [ Vadali, Himmatnagar ]
+      Vijaynagar:
+        cities: [ Vijaynagar, Poshina ]
+
+  Surat:
+    talukas:
+      Bardoli:
+        cities: [ Bardoli, Surat ]
+      Choryasi:
+        cities: [ Surat, Hazira ]
+      Kamrej:
+        cities: [ Kamrej, Kadodara ]
+      Mahuva:
+        cities: [ Mahuva, Bardoli ]
+      Mandvi:
+        cities: [ Mandvi, Mangrol ]
+      Mangrol:
+        cities: [ Mangrol, Umarpada ]
+      Olpad:
+        cities: [ Olpad, Sachin ]
+      Palsana:
+        cities: [ Palsana, Kamrej ]
+      Umarpada:
+        cities: [ Umarpada, Mandvi ]
+
+  Surendranagar:
+    talukas:
+      Chotila:
+        cities: [ Chotila, Thangadh ]
+      Dasada:
+        cities: [ Dasada, Patdi ]
+      Dhrangadhra:
+        cities: [ Dhrangadhra, Halvad ]
+      Lakhtar:
+        cities: [ Lakhtar, Wadhwan ]
+      Limbdi:
+        cities: [ Limbdi, Lakhtar ]
+      Muli:
+        cities: [ Muli, Chotila ]
+      Sayla:
+        cities: [ Sayla, Limbdi ]
+      Thangadh:
+        cities: [ Thangadh, Muli ]
+      Wadhwan:
+        cities: [ Wadhwan, Surendranagar ]
+
+  Tapi:
+    talukas:
+      Dolvan:
+        cities: [ Dolvan, Vyara ]
+      Kukarmunda:
+        cities: [ Kukarmunda, Songadh ]
+      Nizar:
+        cities: [ Nizar, Uchchhal ]
+      Songadh:
+        cities: [ Songadh, Valod ]
+      Uchchhal:
+        cities: [ Uchchhal, Dolvan ]
+      Valod:
+        cities: [ Valod, Vyara ]
+      Vyara:
+        cities: [ Vyara, Nizar ]
+
+  Vadodara:
+    talukas:
+      Dabhoi:
+        cities: [ Dabhoi, Vadodara ]
+      Desar:
+        cities: [ Desar, Savli ]
+      Karjan:
+        cities: [ Karjan, Padra ]
+      Padra:
+        cities: [ Padra, Vadodara ]
+      Savli:
+        cities: [ Savli, Karjan ]
+      Shinor:
+        cities: [ Shinor, Dabhoi ]
+      Vadodara:
+        cities: [ Vadodara, Ajwa ]
+      Waghodia:
+        cities: [ Waghodia, Desar ]
+
+  Valsad:
+    talukas:
+      Dharampur:
+        cities: [ Dharampur, Valsad ]
+      Kaprada:
+        cities: [ Kaprada, Dharampur ]
+      Pardi:
+        cities: [ Pardi, Vapi ]
+      Umbergaon:
+        cities: [ Umbergaon, Pardi ]
+      Valsad:
+        cities: [ Valsad, Umbergaon ]
+      Vapi:
+        cities: [ Vapi, Kaprada ]
