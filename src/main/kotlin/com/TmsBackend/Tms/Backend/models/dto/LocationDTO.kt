@@ -5,16 +5,16 @@ import com.TmsBackend.Tms.Backend.models.dao.Location
 data class LocationDTO(
     val id: String?,
     val name: String,
-    val pointOfContact: String,
-    val contactNo: String,
-    val email: String,
-    val addressLine1: String,
+    val pointOfContact: String?,
+    val contactNo: String?,
+    val email: String?,
+    val addressLine1: String?,
     val addressLine2: String?,
-    val state: String,
+    val state: String?,
     val district: String,
     val taluka: String,
-    val city: String,
-    val pincode: String,
+    val city: String?,
+    val pincode: String?,
     val created_at: Long // Removed default value
 ) {
     companion object {

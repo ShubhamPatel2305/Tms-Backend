@@ -10,3 +10,6 @@ ALTER TABLE location ALTER COLUMN taluka SET NOT NULL;
 
 ALTER TABLE location
     RENAME COLUMN contact_no TO contact_number;
+
+ALTER TABLE party ADD COLUMN created_at BIGINT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW())::BIGINT;
+
