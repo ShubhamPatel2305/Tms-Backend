@@ -11,6 +11,14 @@ class PartyRepository(private val partyDao: PartyDao) {
         return partyDao.getAllParties()
     }
 
+    fun findById(id: String): Party? {
+        return try {
+            partyDao.getPartyById(id)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching party with id $id: ${ex.message}")
+        }
+    }
+
     fun save(party: Party): Party {
         return partyDao.addParty(party)
     }

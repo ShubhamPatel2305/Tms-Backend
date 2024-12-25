@@ -35,6 +35,15 @@ class LocationDao(private val jdbcTemplate: JdbcTemplate) {
         }
     }
 
+    fun getLocationById(id: String): Location? {
+        return try {
+            val sql = "SELECT * FROM location WHERE id = ?"
+            jdbcTemplate.query(sql, rowMapper, id).firstOrNull()
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching location with id $id: ${ex.message}")
+        }
+    }
+
     fun addLocation(location: Location): Location {
         return try {
             val sql = """

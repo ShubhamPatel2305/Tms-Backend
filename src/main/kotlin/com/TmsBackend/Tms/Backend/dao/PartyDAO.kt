@@ -51,6 +51,15 @@ class PartyDao(private val jdbcTemplate: JdbcTemplate) {
         return party
     }
 
+    fun getPartyById(id: String): Party? {
+        return try {
+            val sql = "SELECT * FROM party WHERE id = ?"
+            jdbcTemplate.query(sql, rowMapper, id).firstOrNull()
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching party with id $id: ${ex.message}")
+        }
+    }
+
     fun deleteParty(id: String) {
         val sql = "DELETE FROM party WHERE id = ?"
         jdbcTemplate.update(sql, id)

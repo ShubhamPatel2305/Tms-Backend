@@ -27,6 +27,14 @@ class LocationService(private val locationRepository: LocationRepository) {
         }
     }
 
+    fun getLocationById(id: String): LocationDTO? {
+        return try {
+            locationRepository.findById(id)?.let { LocationDTO.fromDTO(it) }
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching location with id $id: ${ex.message}")
+        }
+    }
+
     fun updateLocation(id: String, request: LocationDTO): LocationDTO {
         return try {
             val location = request.toDTO(id)

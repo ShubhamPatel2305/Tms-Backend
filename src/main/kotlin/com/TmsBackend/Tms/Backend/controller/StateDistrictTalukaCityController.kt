@@ -5,7 +5,7 @@ import com.TmsBackend.Tms.Backend.service.StateDistrictTalukaCityService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @CrossOrigin
 class StateDistrictTalukaCityController(
     private val stateDistrictTalukaCityService: StateDistrictTalukaCityService

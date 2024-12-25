@@ -7,6 +7,15 @@ import org.springframework.stereotype.Repository
 @Repository
 class LocationRepository(private val locationDao: LocationDao) {
 
+
+    fun findById(id: String): Location? {
+        return try {
+            locationDao.getLocationById(id)
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching location with id $id: ${ex.message}")
+        }
+    }
+
     fun findAll(): List<Location> {
         return try {
             locationDao.getAlllocation()

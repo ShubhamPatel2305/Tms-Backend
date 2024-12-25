@@ -20,6 +20,14 @@ class PartyService(private val partyRepository: PartyRepository) {
         return PartyDTO.fromDTO(partyRepository.save(party))
     }
 
+    fun getPartyById(id: String): PartyDTO? {
+        return try {
+            partyRepository.findById(id)?.let { PartyDTO.fromDTO(it) }
+        } catch (ex: Exception) {
+            throw RuntimeException("Error fetching party with id $id: ${ex.message}")
+        }
+    }
+
     fun updateParty(id: String, request: PartyDTO): PartyDTO {
         val party = request.toDTO(id)
         return PartyDTO.fromDTO(partyRepository.update(party))
