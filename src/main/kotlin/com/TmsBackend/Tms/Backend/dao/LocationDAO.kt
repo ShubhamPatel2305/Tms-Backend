@@ -14,7 +14,7 @@ class LocationDao(private val jdbcTemplate: JdbcTemplate) {
             id = rs.getString("id"),
             name = rs.getString("name"),
             pointOfContact = rs.getString("point_of_contact"),
-            contactNo = rs.getString("contact_no"),
+            contactNo = rs.getString("contact_number"),
             email = rs.getString("email"),
             addressLine1 = rs.getString("address_line1"),
             addressLine2 = rs.getString("address_line2"),
@@ -33,7 +33,7 @@ class LocationDao(private val jdbcTemplate: JdbcTemplate) {
 
     fun addLocation(location: Location): Location {
         val sql = """
-            INSERT INTO location (id, name, point_of_contact, contact_no, email, address_line1, address_line2, state, district, taluka, city, pincode)
+            INSERT INTO location (id, name, point_of_contact, contact_number, email, address_line1, address_line2, state, district, taluka, city, pincode)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         jdbcTemplate.update(sql, location.id, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
@@ -43,7 +43,7 @@ class LocationDao(private val jdbcTemplate: JdbcTemplate) {
 
     fun updateLocation(location: Location): Location {
         val sql = """
-            UPDATE location SET name = ?, point_of_contact = ?, contact_no = ?, email = ?, address_line1 = ?, address_line2 = ?, state = ?, 
+            UPDATE location SET name = ?, point_of_contact = ?, contact_number = ?, email = ?, address_line1 = ?, address_line2 = ?, state = ?, 
             district = ?, taluka = ?, city = ?, pincode = ? WHERE id = ?
         """
         jdbcTemplate.update(sql, location.name, location.pointOfContact, location.contactNo, location.email, location.addressLine1,
