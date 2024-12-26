@@ -10,9 +10,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 @Service
 class StateDistrictTalukaCityService() {
-    fun sayHello(): List<String> {
-        return listOf("hello")
-    }
     private val locations: Locations
 
     init {
