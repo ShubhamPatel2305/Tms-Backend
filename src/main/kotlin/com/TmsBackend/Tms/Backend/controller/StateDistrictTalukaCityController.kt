@@ -12,21 +12,22 @@ class StateDistrictTalukaCityController(
 ) {
     @GetMapping("/states/list")
     fun listStates(): List<String> {
-        return stateDistrictTalukaCityService.listStates()
+        return stateDistrictTalukaCityService.listStates().toSet().toList()
     }
 
     @PostMapping("/districts/list")
     fun listDistricts(@RequestBody request: StateRequest): List<String> {
-        return stateDistrictTalukaCityService.listDistricts(request)
+        return stateDistrictTalukaCityService.listDistricts(request).toSet().toList()
     }
 
     @PostMapping("/talukas/list")
     fun listTalukas(@RequestBody request: DistrictRequest): List<String> {
-        return stateDistrictTalukaCityService.listTalukas(request)
+        return stateDistrictTalukaCityService.listTalukas(request).toSet().toList()
     }
 
     @PostMapping("/cities/list")
     fun listCities(@RequestBody request: CityRequest): List<String> {
-        return stateDistrictTalukaCityService.listCities(request)
+        val cities = stateDistrictTalukaCityService.listCities(request)
+        return cities.toSet().toList()
     }
 }
