@@ -11,7 +11,7 @@ data class DoItem(
     val material_id: String,
     val quantity: Int,
     val unit_id: String,      // Foreign Key
-    val deadline: java.sql.Date,
+    val deadline: Long,
     val pending: Int,
     val ongoing: Int,
     val status: String,
