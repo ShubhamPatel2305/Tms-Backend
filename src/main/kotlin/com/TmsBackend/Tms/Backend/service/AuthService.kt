@@ -1,6 +1,8 @@
 package com.TmsBackend.Tms.Backend.service
 
 import com.TmsBackend.Tms.Backend.dao.AuthDao
+import com.TmsBackend.Tms.Backend.exceptions.ExpiredTokenException
+import com.TmsBackend.Tms.Backend.exceptions.InvalidTokenException
 import com.TmsBackend.Tms.Backend.models.dao.Employ
 import com.TmsBackend.Tms.Backend.models.dao.UserAuth
 import com.TmsBackend.Tms.Backend.models.dto.CreateUserRequest
@@ -8,6 +10,8 @@ import com.TmsBackend.Tms.Backend.models.dto.LoginRequest
 import com.TmsBackend.Tms.Backend.models.dto.RefreshTokenRequest
 import com.TmsBackend.Tms.Backend.models.dto.TokenResponse
 import com.TmsBackend.Tms.Backend.utils.JwtUtil
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -58,25 +62,34 @@ class AuthService(
     }
 
     fun refreshToken(request: RefreshTokenRequest): TokenResponse {
-        val claims = jwtUtil.validateAndGetClaims(request.refreshToken)
-        val email = claims.subject
+        try {
+            val claims = jwtUtil.validateAndGetClaims(request.refreshToken)
+            val email = claims.subject
 
-        val userPair = authDao.findUserByEmail(email)
-            ?: throw IllegalArgumentException("User not found")
+            val userPair = authDao.findUserByEmail(email)
+                ?: throw InvalidTokenException("User not found") // Case 2
 
-        val (employ, userAuth) = userPair
+            val (employ, userAuth) = userPair
 
-        if (userAuth.refresh_token != request.refreshToken) {
-            throw IllegalArgumentException("Invalid refresh token")
+            if (userAuth.refresh_token != request.refreshToken) {
+                throw InvalidTokenException("Invalid refresh token") // Case 2
+            }
+
+            val newAccessToken = jwtUtil.generateAccessToken(employ)
+            val newRefreshToken = jwtUtil.generateRefreshToken(employ)
+
+            authDao.updateRefreshToken(email, newRefreshToken)
+
+            return TokenResponse(newAccessToken, newRefreshToken) // Case 3: Success
+        } catch (e: JwtException) {
+            if (e is ExpiredJwtException) {
+                throw ExpiredTokenException("Refresh token expired") // Case 1
+            } else {
+                throw InvalidTokenException("Invalid refresh token") // Case 2
+            }
         }
-
-        val newAccessToken = jwtUtil.generateAccessToken(employ)
-        val newRefreshToken = jwtUtil.generateRefreshToken(employ)
-
-        authDao.updateRefreshToken(email, newRefreshToken)
-
-        return TokenResponse(newAccessToken, newRefreshToken)
     }
+
 
     private fun generateRandomPassword(): String {
         return (1..6).map { (0..9).random() }.joinToString("")
