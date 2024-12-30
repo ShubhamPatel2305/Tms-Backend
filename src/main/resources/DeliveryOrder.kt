@@ -3,30 +3,31 @@ package app.tmsbackend.model
 import java.util.UUID
 
 data class Party(
-    val id: String?,
-    val companyName: String,
-    val pointOfContact: String?,
-    val contactNumber: String,
-    val email: String?,
-    val addressLine1: String?,
+    val id: String? = UUID.randomUUID().toString(),
+    val name: String,
+    val pointOfContact: String,
+    val contactNo: String,
+    val email: String,
+    val addressLine1: String,
     val addressLine2: String?,
-    val state: String?,
-    val district: String?,
-    val taluka: String?,
-    val city: String?,
-    val pinCode: String?,
+    val state: String,
+    val district: String,
+    val taluka: String,
+    val city: String,
+    val pincode: String,
+    val created_at: Long = System.currentTimeMillis()
 )
 
 data class Material(
-    val id: String = UUID.randomUUID().toString(),
-    val materialName: String,
+    val id: String?= UUID.randomUUID().toString(),
+    val name: String,
 )
 
 data class Location(
-    val id: String?,
-    val companyName: String,
+    val id: String? = UUID.randomUUID().toString(), // UUID for unique identifier
+    val name: String,
     val pointOfContact: String?,
-    val contactNumber: String,
+    val contactNo: String?,
     val email: String?,
     val addressLine1: String?,
     val addressLine2: String?,
@@ -34,7 +35,8 @@ data class Location(
     val district: String,
     val taluka: String,
     val city: String?,
-    val pinCode: String?,
+    val pincode: String?,
+    val created_at: Long = System.currentTimeMillis() // Default to current epoch time in milliseconds
 )
 
 data class DeliveryOrder (

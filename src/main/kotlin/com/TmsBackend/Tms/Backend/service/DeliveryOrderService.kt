@@ -1,6 +1,8 @@
 package com.TmsBackend.Tms.Backend.service
 
-import com.TmsBackend.Tms.Backend.models.dto.DoRequest
+import com.TmsBackend.Tms.Backend.models.dao.DeliveryOrder
+import com.TmsBackend.Tms.Backend.models.dao.DeliveryOrderItem
+import com.TmsBackend.Tms.Backend.models.dto.*
 import com.TmsBackend.Tms.Backend.repository.DeliveryOrderRepository
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -8,121 +10,170 @@ import java.util.UUID
 @Service
 class DeliveryOrderService(private val deliveryOrderRepository: DeliveryOrderRepository) {
 
-    fun createOrUpdateDo(request: DoRequest): Map<String, Any> {
-        return if (request.id != null) {
-            updateDo(request)
-        } else {
-            createNewDo(request)
-        }
-    }
-
-    private fun createNewDo(request: DoRequest): Map<String, Any> {
-        val doId = UUID.randomUUID().toString()
+    fun createDeliveryOrder(request: DeliveryOrderDTO): Map<String, Any> {
         val currentTime = System.currentTimeMillis()
+        val orderId = UUID.randomUUID().toString()
 
-        // Calculate totals based on DO items if present
-        val totalQuantity = request.do_items?.sumOf { it.quantity } ?: 0
+        // Calculate total quantities from items
+        val allItems = request.deliveryOrderSections?.flatMap { it.deliveryOrderItems ?: emptyList() } ?: emptyList()
+        val grandTotalQuantity = allItems.sumOf { it.quantity }
 
-        val doResult = deliveryOrderRepository.createDo(
-            id = doId,
-            doId = request.do_id,
-            partyId = request.party_id,
-            unitId = request.unit_id,
-            total = totalQuantity,
-            pending = totalQuantity,
-            ongoing = 0,
-            status = "CREATED",
+        // Create delivery order with calculated quantities
+        val deliveryOrder = DeliveryOrder(
+            id = orderId,
+            contractId = request.contractId,
+            partyId = request.partyId,
+            dateOfContract = request.dateOfContract,
+            status = request.status,
+            grandTotalQuantity = grandTotalQuantity,
+            grandTotalPendingQuantity = grandTotalQuantity, // Initially all quantity is pending
+            grandTotalInProgressQuantity = 0,
+            grandTotalDeliveredQuantity = 0,
             createdAt = currentTime,
             updatedAt = currentTime
         )
 
-        // Create DO items if present
-        request.do_items?.let { items ->
-            items.forEach { item ->
-                deliveryOrderRepository.createDoItem(
+        deliveryOrderRepository.createDeliveryOrder(deliveryOrder)
+
+        // Create delivery order items
+        request.deliveryOrderSections?.forEach { section ->
+            section.deliveryOrderItems?.forEach { itemDto ->
+                val deliveryOrderItem = DeliveryOrderItem(
                     id = UUID.randomUUID().toString(),
-                    doId = doId,
-                    state = item.state,
-                    district = item.district,
-                    taluka = item.taluka,
-                    city = item.city,
-                    locationId = item.location_id,
-                    materialId = item.material_id,
-                    quantity = item.quantity,
-                    unitId = item.unit_id,
-                    deadline = item.deadline,
-                    pending = item.quantity,
-                    ongoing = 0,
-                    status = "CREATED",
-                    createdAt = currentTime,
-                    updatedAt = currentTime
+                    deliveryOrderId = orderId,
+                    district = itemDto.district,
+                    taluka = itemDto.taluka,
+                    locationId = itemDto.locationId,
+                    materialId = itemDto.materialId,
+                    quantity = itemDto.quantity,
+                    pendingQuantity = itemDto.quantity, // Initially all quantity is pending
+                    deliveredQuantity = 0,
+                    inProgressQuantity = 0,
+                    rate = itemDto.rate,
+                    unit = itemDto.unit ?: "",
+                    dueDate = itemDto.dueDate ?: 0,
+                    status = itemDto.status
                 )
+                deliveryOrderRepository.createDeliveryOrderItem(deliveryOrderItem)
             }
         }
 
         return mapOf(
-            "message" to "DO created successfully",
-            "do_id" to doId
+            "message" to "Delivery order created successfully",
+            "id" to orderId
         )
     }
 
-    private fun updateDo(request: DoRequest): Map<String, Any> {
-        val currentTime = System.currentTimeMillis()
+    fun getDeliveryOrderById(id: String): DeliveryOrderDTO {
+        val deliveryOrder = deliveryOrderRepository.findDeliveryOrderById(id)
+            ?: throw IllegalArgumentException("Delivery order not found with ID: $id")
 
-        // Verify DO exists
-        val existingDo = deliveryOrderRepository.findDoById(request.id!!)
-            ?: throw IllegalArgumentException("DO not found with ID: ${request.id}")
+        val items = deliveryOrderRepository.findDeliveryOrderItemsByOrderId(id)
 
-        // Update DO
-        deliveryOrderRepository.updateDo(
-            id = request.id,
-            doId = request.do_id,
-            partyId = request.party_id,
-            unitId = request.unit_id,
-            updatedAt = currentTime
+        // Group items by district and calculate section totals
+        val sections = items.groupBy { it.district }
+            .map { (district, districtItems) ->
+                DeliveryOrderSectionDTO(
+                    district = district,
+                    totalQuantity = districtItems.sumOf { it.quantity },
+                    totalPendingQuantity = districtItems.sumOf { it.pendingQuantity },
+                    totalInProgressQuantity = districtItems.sumOf { it.inProgressQuantity },
+                    totalDeliveredQuantity = districtItems.sumOf { it.deliveredQuantity },
+                    status = calculateSectionStatus(districtItems),
+                    deliveryOrderItems = districtItems.map { item ->
+                        DeliveryOrderItemDTO(
+                            id = item.id,
+                            deliveryOrderId = item.deliveryOrderId,
+                            district = item.district,
+                            taluka = item.taluka,
+                            locationId = item.locationId,
+                            materialId = item.materialId,
+                            quantity = item.quantity,
+                            pendingQuantity = item.pendingQuantity,
+                            deliveredQuantity = item.deliveredQuantity,
+                            inProgressQuantity = item.inProgressQuantity,
+                            rate = item.rate,
+                            unit = item.unit,
+                            dueDate = item.dueDate,
+                            status = item.status
+                        )
+                    }
+                )
+            }
+
+        return DeliveryOrderDTO(
+            id = deliveryOrder.id,
+            contractId = deliveryOrder.contractId,
+            partyId = deliveryOrder.partyId,
+            dateOfContract = deliveryOrder.dateOfContract,
+            status = deliveryOrder.status,
+            grandTotalQuantity = deliveryOrder.grandTotalQuantity,
+            grandTotalPendingQuantity = deliveryOrder.grandTotalPendingQuantity,
+            grandTotalInProgressQuantity = deliveryOrder.grandTotalInProgressQuantity,
+            grandTotalDeliveredQuantity = deliveryOrder.grandTotalDeliveredQuantity,
+            createdAt = deliveryOrder.createdAt,
+            updatedAt = deliveryOrder.updatedAt,
+            deliveryOrderSections = sections
+        )
+    }
+
+    private fun calculateSectionStatus(items: List<DeliveryOrderItem>): String {
+        return when {
+            items.all { it.status == "COMPLETED" } -> "COMPLETED"
+            items.all { it.status == "pending" } -> "pending"
+            else -> "IN_PROGRESS"
+        }
+    }
+
+    // getAllDeliveryOrders remains the same
+    fun getAllDeliveryOrders(): List<DeliveryOrderListDTO> {
+        return deliveryOrderRepository.findAllDeliveryOrders()
+    }
+
+    fun addItemsToDeliveryOrder(orderId: String, request: DeliveryOrderDTO): Map<String, Any> {
+        // Verify delivery order exists
+        val existingOrder = deliveryOrderRepository.findDeliveryOrderById(orderId)
+            ?: throw IllegalArgumentException("Delivery order not found with ID: $orderId")
+
+        // Calculate additional quantities from new items
+        val newItems = request.deliveryOrderSections?.flatMap { it.deliveryOrderItems ?: emptyList() } ?: emptyList()
+        val additionalQuantity = newItems.sumOf { it.quantity }
+
+        // Update delivery order totals
+        val updatedOrder = existingOrder.copy(
+            grandTotalQuantity = existingOrder.grandTotalQuantity + additionalQuantity,
+            grandTotalPendingQuantity = existingOrder.grandTotalPendingQuantity + additionalQuantity,
+            updatedAt = System.currentTimeMillis()
         )
 
-        // Handle DO items if present
-        request.do_items?.let { items ->
-            val totalQuantity = items.sumOf { it.quantity }
+        deliveryOrderRepository.updateDeliveryOrder(updatedOrder)
 
-            // Update DO totals
-            deliveryOrderRepository.updateDoTotals(
-                id = request.id,
-                total = totalQuantity,
-                pending = totalQuantity,
-                ongoing = 0,
-                updatedAt = currentTime
-            )
-
-            // Delete existing items and create new ones
-            deliveryOrderRepository.deleteDoItems(request.id)
-
-            items.forEach { item ->
-                deliveryOrderRepository.createDoItem(
+        // Create new delivery order items
+        request.deliveryOrderSections?.forEach { section ->
+            section.deliveryOrderItems?.forEach { itemDto ->
+                val deliveryOrderItem = DeliveryOrderItem(
                     id = UUID.randomUUID().toString(),
-                    doId = request.id,
-                    state = item.state,
-                    district = item.district,
-                    taluka = item.taluka,
-                    city = item.city,
-                    locationId = item.location_id,
-                    materialId = item.material_id,
-                    quantity = item.quantity,
-                    unitId = item.unit_id,
-                    deadline = item.deadline,
-                    pending = item.quantity,
-                    ongoing = 0,
-                    status = "CREATED",
-                    createdAt = currentTime,
-                    updatedAt = currentTime
+                    deliveryOrderId = orderId,
+                    district = itemDto.district,
+                    taluka = itemDto.taluka,
+                    locationId = itemDto.locationId,
+                    materialId = itemDto.materialId,
+                    quantity = itemDto.quantity,
+                    pendingQuantity = itemDto.quantity, // Initially all quantity is pending
+                    deliveredQuantity = 0,
+                    inProgressQuantity = 0,
+                    rate = itemDto.rate,
+                    unit = itemDto.unit ?: "",
+                    dueDate = itemDto.dueDate ?: 0,
+                    status = existingOrder.status  // Use the same status as parent order
                 )
+                deliveryOrderRepository.createDeliveryOrderItem(deliveryOrderItem)
             }
         }
 
         return mapOf(
-            "message" to "DO updated successfully",
-            "do_id" to request.id
+            "message" to "Items added successfully to delivery order",
+            "id" to orderId
         )
     }
 }

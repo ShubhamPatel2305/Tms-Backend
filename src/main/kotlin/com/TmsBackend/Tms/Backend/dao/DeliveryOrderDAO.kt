@@ -1,5 +1,7 @@
 package com.TmsBackend.Tms.Backend.dao
 
+import com.TmsBackend.Tms.Backend.models.dao.DeliveryOrder
+import com.TmsBackend.Tms.Backend.models.dao.DeliveryOrderItem
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
@@ -7,125 +9,152 @@ import org.springframework.stereotype.Component
 @Component
 class DeliveryOrderDao(private val jdbcTemplate: JdbcTemplate) {
 
-    fun createDo(
-        id: String,
-        doId: String,
-        partyId: String,
-        unitId: String,
-        total: Int,
-        pending: Int,
-        ongoing: Int,
-        status: String,
-        createdAt: Long,
-        updatedAt: Long
-    ): Boolean {
+    fun findAllDeliveryOrders(): List<Map<String, Any>> {
         val sql = """
-            INSERT INTO "do" (id, do_id, party_id, unit_id, total, pending, ongoing, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            SELECT d.*, p.name as party_name 
+            FROM delivery_order d
+            LEFT JOIN party p ON d.party_id = p.id
+            ORDER BY d.created_at DESC
+        """.trimIndent()
+
+        return jdbcTemplate.queryForList(sql)
+    }
+    fun createDeliveryOrder(deliveryOrder: DeliveryOrder): Boolean {
+        val sql = """
+            INSERT INTO delivery_order (
+                id, contract_id, party_id, date_of_contract, status,
+                grand_total_quantity, grand_total_pending_quantity,
+                grand_total_in_progress_quantity, grand_total_delivered_quantity,
+                created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """.trimIndent()
 
         return try {
-            jdbcTemplate.update(sql, id, doId, partyId, unitId, total, pending, ongoing, status, createdAt, updatedAt) > 0
+            jdbcTemplate.update(
+                sql,
+                deliveryOrder.id,
+                deliveryOrder.contractId,
+                deliveryOrder.partyId,
+                deliveryOrder.dateOfContract,
+                deliveryOrder.status,
+                deliveryOrder.grandTotalQuantity,
+                deliveryOrder.grandTotalPendingQuantity,
+                deliveryOrder.grandTotalInProgressQuantity,
+                deliveryOrder.grandTotalDeliveredQuantity,
+                deliveryOrder.createdAt,
+                deliveryOrder.updatedAt
+            ) > 0
         } catch (e: Exception) {
-            throw IllegalStateException("Failed to create DO: ${e.message}")
+            throw IllegalStateException("Failed to create delivery order: ${e.message}")
         }
     }
 
-    fun createDoItem(
-        id: String,
-        doId: String,
-        state: String,
-        district: String,
-        taluka: String,
-        city: String,
-        locationId: String,
-        materialId: String,
-        quantity: Int,
-        unitId: String,
-        deadline: Long,
-        pending: Int,
-        ongoing: Int,
-        status: String,
-        createdAt: Long,
-        updatedAt: Long
-    ): Boolean {
+    fun createDeliveryOrderItem(item: DeliveryOrderItem): Boolean {
         val sql = """
-            INSERT INTO do_item (id, do_id, state, district, taluka, city, location_id, material_id, quantity, unit_id, 
-                               deadline, pending, ongoing, status, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO delivery_order_item (
+                id, delivery_order_id, district, taluka, location_id,
+                material_id, quantity, pending_quantity, delivered_quantity,
+                in_progress_quantity, rate, unit, due_date, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """.trimIndent()
 
         return try {
-            jdbcTemplate.update(sql, id, doId, state, district, taluka, city, locationId, materialId, quantity, unitId,
-                deadline, pending, ongoing, status, createdAt, updatedAt) > 0
+            jdbcTemplate.update(
+                sql,
+                item.id,
+                item.deliveryOrderId,
+                item.district,
+                item.taluka,
+                item.locationId,
+                item.materialId,
+                item.quantity,
+                item.pendingQuantity,
+                item.deliveredQuantity,
+                item.inProgressQuantity,
+                item.rate,
+                item.unit,
+                item.dueDate,
+                item.status
+            ) > 0
         } catch (e: Exception) {
-            throw IllegalStateException("Failed to create DO item: ${e.message}")
+            throw IllegalStateException("Failed to create delivery order item: ${e.message}")
         }
     }
 
-    fun findDoById(id: String): Map<String, Any>? {
+    fun findDeliveryOrderById(id: String): DeliveryOrder? {
         val sql = """
-            SELECT * FROM "do" WHERE id = ?
+            SELECT * FROM delivery_order WHERE id = ?
         """.trimIndent()
 
         return try {
-            jdbcTemplate.queryForMap(sql, id)
+            jdbcTemplate.queryForObject(sql, { rs, _ ->
+                DeliveryOrder(
+                    id = rs.getString("id"),
+                    contractId = rs.getString("contract_id"),
+                    partyId = rs.getString("party_id"),
+                    dateOfContract = rs.getLong("date_of_contract"),
+                    status = rs.getString("status"),
+                    grandTotalQuantity = rs.getInt("grand_total_quantity"),
+                    grandTotalPendingQuantity = rs.getInt("grand_total_pending_quantity"),
+                    grandTotalInProgressQuantity = rs.getInt("grand_total_in_progress_quantity"),
+                    grandTotalDeliveredQuantity = rs.getInt("grand_total_delivered_quantity"),
+                    createdAt = rs.getLong("created_at"),
+                    updatedAt = rs.getLong("updated_at")
+                )
+            }, id)
         } catch (e: EmptyResultDataAccessException) {
             null
-        } catch (e: Exception) {
-            throw IllegalStateException("Failed to fetch DO: ${e.message}")
         }
     }
 
-    fun updateDo(
-        id: String,
-        doId: String,
-        partyId: String,
-        unitId: String,
-        updatedAt: Long
-    ): Boolean {
+    fun findDeliveryOrderItemsByOrderId(orderId: String): List<DeliveryOrderItem> {
         val sql = """
-            UPDATE "do"
-            SET do_id = ?, party_id = ?, unit_id = ?, updated_at = ?
-            WHERE id = ?
+            SELECT * FROM delivery_order_item WHERE delivery_order_id = ?
         """.trimIndent()
 
-        return try {
-            jdbcTemplate.update(sql, doId, partyId, unitId, updatedAt, id) > 0
-        } catch (e: Exception) {
-            throw IllegalStateException("Failed to update DO: ${e.message}")
-        }
+        return jdbcTemplate.query(sql, { rs, _ ->
+            DeliveryOrderItem(
+                id = rs.getString("id"),
+                deliveryOrderId = rs.getString("delivery_order_id"),
+                district = rs.getString("district"),
+                taluka = rs.getString("taluka"),
+                locationId = rs.getString("location_id"),
+                materialId = rs.getString("material_id"),
+                quantity = rs.getInt("quantity"),
+                pendingQuantity = rs.getInt("pending_quantity"),
+                deliveredQuantity = rs.getInt("delivered_quantity"),
+                inProgressQuantity = rs.getInt("in_progress_quantity"),
+                rate = rs.getDouble("rate"),
+                unit = rs.getString("unit"),
+                dueDate = rs.getLong("due_date"),
+                status = rs.getString("status")
+            )
+        }, orderId)
     }
 
-    fun updateDoTotals(
-        id: String,
-        total: Int,
-        pending: Int,
-        ongoing: Int,
-        updatedAt: Long
-    ): Boolean {
+    fun updateDeliveryOrder(deliveryOrder: DeliveryOrder): Boolean {
         val sql = """
-            UPDATE "do"
-            SET total = ?, pending = ?, ongoing = ?, updated_at = ?
-            WHERE id = ?
-        """.trimIndent()
+        UPDATE delivery_order SET
+            grand_total_quantity = ?,
+            grand_total_pending_quantity = ?,
+            grand_total_in_progress_quantity = ?,
+            grand_total_delivered_quantity = ?,
+            updated_at = ?
+        WHERE id = ?
+    """.trimIndent()
 
         return try {
-            jdbcTemplate.update(sql, total, pending, ongoing, updatedAt, id) > 0
+            jdbcTemplate.update(
+                sql,
+                deliveryOrder.grandTotalQuantity,
+                deliveryOrder.grandTotalPendingQuantity,
+                deliveryOrder.grandTotalInProgressQuantity,
+                deliveryOrder.grandTotalDeliveredQuantity,
+                deliveryOrder.updatedAt,
+                deliveryOrder.id
+            ) > 0
         } catch (e: Exception) {
-            throw IllegalStateException("Failed to update DO totals: ${e.message}")
-        }
-    }
-
-    fun deleteDoItems(doId: String): Boolean {
-        val sql = """
-            DELETE FROM do_item WHERE do_id = ?
-        """.trimIndent()
-
-        return try {
-            jdbcTemplate.update(sql, doId) >= 0
-        } catch (e: Exception) {
-            throw IllegalStateException("Failed to delete DO items: ${e.message}")
+            throw IllegalStateException("Failed to update delivery order: ${e.message}")
         }
     }
 }

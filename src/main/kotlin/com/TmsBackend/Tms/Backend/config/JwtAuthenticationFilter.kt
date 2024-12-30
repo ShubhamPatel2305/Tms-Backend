@@ -31,6 +31,7 @@ class JwtAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
                 SecurityContextHolder.getContext().authentication = authentication
             }
         } catch (e: Exception) {
+            println(e.message)
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token")
             return
         }
@@ -40,6 +41,7 @@ class JwtAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
 
     private fun extractToken(request: HttpServletRequest): String? {
         val header = request.getHeader("Authorization")
+        println(header)
         return if (header != null && header.startsWith("Bearer ")) {
             header.substring(7)
         } else null
